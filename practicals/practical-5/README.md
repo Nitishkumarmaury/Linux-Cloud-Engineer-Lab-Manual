@@ -1,4 +1,22 @@
-# Practical 5: Real-Time Log Monitoring & Analysis
+# Practical 5: Backup and Recovery Management
+
+## 🎯 Learning Objectives
+
+After completing this practical, you will be able to:
+- Design and implement backup strategies
+- Create automated backup solutions
+- Perform data recovery operations
+- Manage backup retention policies
+- Monitor backup processes
+
+## 🔧 Technical Skills Covered
+
+- Backup automation
+- Data recovery procedures
+- Shell scripting
+- Cron job scheduling
+- Storage management
+- Disaster recovery planning
 
 This practical focuses on essential log monitoring and analysis skills required for troubleshooting in cloud environments.
 

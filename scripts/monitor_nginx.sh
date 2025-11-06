@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 4: Web Server Monitoring
+# Purpose: Monitor Nginx web server status and performance
+# Created: November 7, 2025
+#=================================================================
+
 LOG_FILE="/var/log/nginx/access.log"
 ALERT_THRESHOLD=10  # Alerts if more than 10 errors per minute
 TRAFFIC_THRESHOLD=1000  # Alerts if more than 1000 requests per minute

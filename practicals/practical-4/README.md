@@ -1,4 +1,334 @@
-# Practical 4: Automating Backups with Bash & Cron
+# Practical 4: Web Server Configuration and Management
+
+## 🎯 Learning Objectives
+
+After completing this practical, you will be able to:
+- Install and configure Nginx web server
+- Set up virtual hosts and SSL/TLS
+- Implement reverse proxy configurations
+- Monitor web server performance
+- Secure web applications
+- Handle load balancing
+
+## 🔧 Technical Skills Covered
+
+- Web server administration
+- SSL/TLS configuration
+- Reverse proxy setup
+- Performance tuning
+- Security hardening
+- Load balancing
+
+## 📋 Prerequisites
+
+1. Linux system (Ubuntu 20.04 LTS recommended)
+2. Root or sudo access
+3. Domain name (optional but recommended)
+4. Basic networking knowledge
+
+## 🚀 Step-by-Step Implementation Guide
+
+### Step 1: Installing Nginx
+
+```bash
+# Update system packages
+sudo apt update
+sudo apt upgrade -y
+
+# Install Nginx and related tools
+sudo apt install -y \
+    nginx \
+    ssl-cert \
+    certbot \
+    python3-certbot-nginx \
+    apache2-utils
+
+# Check Nginx status
+sudo systemctl status nginx
+```
+
+**💡 Explanation:**
+- `nginx`: Main web server package
+- `ssl-cert`: SSL certificate utilities
+- `certbot`: Let's Encrypt client
+- `apache2-utils`: Useful tools like htpasswd
+
+### Step 2: Basic Configuration
+
+```bash
+# Backup default configuration
+sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+
+# Create main configuration
+sudo tee /etc/nginx/nginx.conf <<EOF
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+    worker_connections 1024;
+    multi_accept on;
+}
+
+http {
+    # Basic Settings
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    # SSL Settings
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM";
+    ssl_session_cache shared:SSL:10m;
+
+    # Logging Settings
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    # Virtual Host Configs
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}
+EOF
+
+# Test configuration
+sudo nginx -t
+```
+
+### Step 3: Setting Up Virtual Hosts
+
+```bash
+# Create directory structure
+sudo mkdir -p /var/www/example.com/html
+sudo chown -R $USER:$USER /var/www/example.com/html
+sudo chmod -R 755 /var/www/example.com
+
+# Create sample page
+sudo tee /var/www/example.com/html/index.html <<EOF
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to example.com!</title>
+</head>
+<body>
+    <h1>Success! Your virtual host is working!</h1>
+</body>
+</html>
+EOF
+
+# Create server block configuration
+sudo tee /etc/nginx/sites-available/example.com <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+    
+    root /var/www/example.com/html;
+    index index.html index.htm index.nginx-debian.html;
+    
+    server_name example.com www.example.com;
+    
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF
+
+# Enable site
+sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Step 4: SSL/TLS Configuration
+
+```bash
+# Install SSL certificate using Let's Encrypt
+sudo certbot --nginx -d example.com -d www.example.com
+
+# Auto-renewal configuration
+sudo systemctl status certbot.timer
+
+# Test renewal
+sudo certbot renew --dry-run
+```
+
+### Step 5: Setting Up Reverse Proxy
+
+```bash
+# Create reverse proxy configuration
+sudo tee /etc/nginx/sites-available/reverse-proxy <<EOF
+server {
+    listen 80;
+    server_name app.example.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+    }
+}
+EOF
+
+# Enable configuration
+sudo ln -s /etc/nginx/sites-available/reverse-proxy /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Step 6: Load Balancing Configuration
+
+```bash
+# Create upstream configuration
+sudo tee /etc/nginx/conf.d/upstream.conf <<EOF
+upstream backend {
+    server backend1.example.com:8080;
+    server backend2.example.com:8080;
+    server backend3.example.com:8080;
+}
+
+server {
+    listen 80;
+    server_name loadbalancer.example.com;
+
+    location / {
+        proxy_pass http://backend;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+}
+EOF
+
+# Apply configuration
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+## ✅ Success Criteria
+
+### Required Outcomes
+- [x] Nginx installed and running
+- [x] Virtual hosts configured
+- [x] SSL/TLS implemented
+- [x] Reverse proxy working
+- [x] Load balancing configured
+- [x] Security measures applied
+
+### Security Checklist
+- [ ] SSL/TLS properly configured
+- [ ] HTTP/2 enabled
+- [ ] Security headers implemented
+- [ ] Access logs enabled
+- [ ] Rate limiting configured
+- [ ] DDoS protection implemented
+
+## 🔍 Troubleshooting Guide
+
+### 1. Connection Issues
+```bash
+# Check Nginx status
+sudo systemctl status nginx
+
+# Test configuration
+sudo nginx -t
+
+# Check logs
+sudo tail -f /var/log/nginx/error.log
+sudo tail -f /var/log/nginx/access.log
+```
+
+### 2. SSL Problems
+```bash
+# Verify certificate
+sudo certbot certificates
+
+# Test SSL configuration
+curl -vI https://example.com
+
+# Check SSL grade
+# Use SSL Labs online tool
+```
+
+### 3. Performance Issues
+```bash
+# Check current connections
+netstat -an | grep :80 | wc -l
+
+# Monitor Nginx process
+top -p $(pgrep nginx | tr "\n" "," | sed 's/,$//')
+
+# Check access patterns
+sudo tail -f /var/log/nginx/access.log | ngxtop
+```
+
+## 💼 Career Development
+
+### Key Skills Demonstrated
+- Web server administration
+- SSL/TLS management
+- Reverse proxy configuration
+- Load balancer setup
+- Security implementation
+
+### Interview Topics
+1. **Web Server Configuration:**
+   - Virtual host setup
+   - SSL/TLS implementation
+   - Performance optimization
+   - Security hardening
+
+2. **Load Balancing:**
+   - Algorithms and methods
+   - Health checks
+   - Session persistence
+   - High availability
+
+### Sample Interview Questions
+1. Explain Nginx's event-driven architecture
+2. How would you secure a web server?
+3. Describe load balancing algorithms
+4. How do you handle SSL termination?
+
+### Salary Insights (2025)
+- Web Administrator: $75,000 - $95,000
+- DevOps Engineer: $120,000 - $180,000
+- System Engineer: $90,000 - $140,000
+- Cloud Architect: $150,000 - $200,000
+
+## 📚 Additional Resources
+
+### Documentation
+- [Nginx Documentation](https://nginx.org/en/docs/)
+- [Let's Encrypt Documentation](https://letsencrypt.org/docs/)
+- [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/)
+
+### Practice Materials
+- [Nginx Cookbook](https://www.nginx.com/resources/library/complete-nginx-cookbook/)
+- [Digital Ocean Tutorials](https://www.digitalocean.com/community/tutorials?q=nginx)
+
+## 🔄 Next Steps
+
+1. Learn advanced Nginx features
+2. Study high availability setups
+3. Implement monitoring solutions
+4. Practice security hardening
+5. Explore containerization
+
+## 📝 Practice Exercises
+
+1. Set up a multi-domain server
+2. Implement rate limiting
+3. Configure caching
+4. Set up HTTP/2
+5. Create a high-availability setup
+
+Remember: A well-configured web server is crucial for application reliability and security!
 
 This practical demonstrates how to create and schedule automated backups, an essential skill for maintaining data safety in cloud environments.
 

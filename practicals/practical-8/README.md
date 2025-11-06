@@ -1,4 +1,23 @@
-# Practical 8: Configuring a Basic Firewall
+# Practical 8: Server Hardening and Security Best Practices
+
+## 🎯 Learning Objectives
+
+After completing this practical, you will be able to:
+- Implement system hardening techniques
+- Secure system services and daemons
+- Configure secure authentication methods
+- Monitor security compliance
+- Perform security audits
+- Apply defense-in-depth strategies
+
+## 🔧 Technical Skills Covered
+
+- System hardening
+- Security compliance
+- Authentication security
+- Access control
+- Audit logging
+- Vulnerability assessment
 
 This practical focuses on implementing network security using UFW (Uncomplicated Firewall) and understanding basic network security concepts.
 

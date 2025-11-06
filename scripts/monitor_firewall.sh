@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 7: Security Configuration
+# Purpose: Monitor firewall status and security events
+# Created: November 7, 2025
+#=================================================================
+
 # Configuration
 LOG_FILE="/var/log/ufw.log"
 ALERT_LOG="/var/log/firewall_alerts.log"

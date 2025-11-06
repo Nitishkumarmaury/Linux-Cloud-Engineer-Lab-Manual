@@ -1,4 +1,23 @@
-# Practical 6: Troubleshooting a "Crashed" Service
+# Practical 6: Log Analysis and System Monitoring
+
+## 🎯 Learning Objectives
+
+After completing this practical, you will be able to:
+- Analyze system and application logs
+- Set up log rotation and archiving
+- Use log analysis tools
+- Create monitoring dashboards
+- Implement log-based alerts
+- Perform security auditing
+
+## 🔧 Technical Skills Covered
+
+- Log analysis
+- System monitoring
+- Security auditing
+- Pattern matching
+- Data visualization
+- Alerting systems
 
 This practical focuses on systematic service troubleshooting, a critical skill for maintaining reliable cloud applications.
 

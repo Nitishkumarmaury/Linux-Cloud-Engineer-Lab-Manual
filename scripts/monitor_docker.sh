@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 9: Container Management
+# Purpose: Monitor Docker containers and resource usage
+# Created: November 7, 2025
+#=================================================================
+
 # Configuration
 LOG_FILE="/var/log/docker_monitor.log"
 ALERT_LOG="/var/log/docker_alerts.log"

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 3: System Resource Monitoring
+# Purpose: Monitor CPU usage and system resources
+# Created: November 7, 2025
+#=================================================================
+
 # Configuration
 THRESHOLD=80         # CPU usage threshold percentage
 INTERVAL=5          # Check interval in seconds

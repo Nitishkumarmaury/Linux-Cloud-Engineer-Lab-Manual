@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 6: Log Analysis and Management
+# Purpose: Analyze system and application logs for issues
+# Created: November 7, 2025
+#=================================================================
+
 LOG_FILE="/var/log/nginx/access.log"
 REPORT_FILE="/var/log/nginx/analysis_$(date +%Y%m%d).txt"
 

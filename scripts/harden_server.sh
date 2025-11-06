@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 8: Server Hardening
+# Purpose: Implement security hardening measures
+# Created: November 7, 2025
+#=================================================================
+
 # Server Hardening Script
 # Usage: ./harden_server.sh <username>
 

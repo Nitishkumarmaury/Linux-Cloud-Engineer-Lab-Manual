@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 5: Backup Management
+# Purpose: Verify and validate backup integrity
+# Created: November 7, 2025
+#=================================================================
+
 BACKUP_DIR="/var/backups/website"
 LOG_DIR="/var/backups/logs"
 

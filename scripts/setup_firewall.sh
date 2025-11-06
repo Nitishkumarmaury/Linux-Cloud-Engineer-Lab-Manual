@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 7: Security Configuration
+# Purpose: Set up and configure firewall rules
+# Created: November 7, 2025
+#=================================================================
+
 # Configuration
 BACKUP_DIR="/etc/ufw/backup"
 LOG_FILE="/var/log/ufw_setup.log"

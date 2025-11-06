@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#=================================================================
+# Practical 5: Backup Management
+# Purpose: Create automated backups of web server data
+# Created: November 7, 2025
+#=================================================================
+
 # Configuration
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="/var/backups/website"

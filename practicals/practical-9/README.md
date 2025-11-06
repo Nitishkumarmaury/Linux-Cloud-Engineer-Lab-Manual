@@ -2,7 +2,7 @@
 
 This practical focuses on containerization using Docker, an essential skill for modern cloud engineering.
 
-## Objectives
+## 🎯 Objectives
 
 - Install and configure Docker
 - Understand container basics
@@ -10,13 +10,13 @@ This practical focuses on containerization using Docker, an essential skill for 
 - Work with Docker networking
 - Create custom Docker images
 
-## Prerequisites
+## 📋 Prerequisites
 
 - Completed Practicals 1-8
 - Understanding of Linux services
 - Basic networking knowledge
 
-## Step-by-Step Guide
+## 🚀 Step-by-Step Guide
 
 ### 1. Docker Installation
 
@@ -98,6 +98,185 @@ LABEL maintainer="your-email@example.com"
 # Install packages
 RUN apt-get update && apt-get install -y \
     nginx \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure nginx
+COPY index.html /var/www/html/
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Create index.html:
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Docker Test</title>
+</head>
+<body>
+    <h1>Hello from Docker!</h1>
+</body>
+</html>
+```
+
+Build and run the image:
+```bash
+# Build image
+docker build -t my-nginx .
+
+# Run container
+docker run -d -p 8080:80 --name my-web my-nginx
+
+# Test
+curl http://localhost:8080
+```
+
+### 4. Docker Networking
+
+```bash
+# List networks
+docker network ls
+
+# Create network
+docker network create my-network
+
+# Run containers on network
+docker run -d --name db --network my-network mongo
+docker run -d --name api --network my-network my-api-image
+
+# Inspect network
+docker network inspect my-network
+```
+
+### 5. Docker Volumes
+
+```bash
+# Create volume
+docker volume create my-data
+
+# List volumes
+docker volume ls
+
+# Use volume
+docker run -d \
+  --name db \
+  -v my-data:/data/db \
+  mongo
+
+# Backup volume
+docker run --rm \
+  -v my-data:/source \
+  -v $(pwd):/backup \
+  ubuntu tar cvf /backup/backup.tar /source
+```
+
+### 6. Docker Compose
+
+Create docker-compose.yml:
+```yaml
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/var/www/html
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+```
+
+Run with Docker Compose:
+```bash
+# Start services
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs
+
+# Stop services
+docker-compose down
+```
+
+## 🔍 Common Issues and Troubleshooting
+
+1. Permission denied
+```bash
+sudo chmod 666 /var/run/docker.sock
+```
+
+2. Container won't start
+```bash
+# Check logs
+docker logs container_name
+
+# Check system resources
+docker stats
+```
+
+3. Image pull failures
+```bash
+# Check Docker Hub status
+# Verify internet connection
+# Try with explicit tag
+docker pull nginx:latest
+```
+
+## 📚 Further Learning
+
+1. Docker Swarm for orchestration
+2. Multi-stage builds
+3. Container security best practices
+4. CI/CD with Docker
+5. Kubernetes basics
+
+## 💡 Pro Tips
+
+1. Use multi-stage builds for smaller images
+2. Implement health checks
+3. Use .dockerignore file
+4. Tag images properly
+5. Regular security scanning
+
+## 🎓 Learning Outcomes
+
+After completing this practical, you should be able to:
+
+1. Install and configure Docker
+2. Create and manage containers
+3. Build custom Docker images
+4. Work with Docker networks and volumes
+5. Use Docker Compose for multi-container applications
+6. Troubleshoot common Docker issues
+
+## 📊 Salary Insights (2024)
+
+- Junior Docker Developer: $60,000 - $85,000
+- Docker/Container Engineer: $85,000 - $120,000
+- Senior Container Platform Engineer: $120,000 - $180,000
+- DevOps Engineer (Docker expertise): $100,000 - $160,000
+
+## 🔗 Additional Resources
+
+1. [Official Docker Documentation](https://docs.docker.com/)
+2. [Docker Hub](https://hub.docker.com/)
+3. [Docker Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+4. [Docker Security](https://docs.docker.com/engine/security/)
     curl \
     && rm -rf /var/lib/apt/lists/*
 

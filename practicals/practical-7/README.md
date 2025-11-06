@@ -1,4 +1,23 @@
-# Practical 7: Identifying High-CPU Processes
+# Practical 7: Security and Firewall Configuration
+
+## 🎯 Learning Objectives
+
+After completing this practical, you will be able to:
+- Configure UFW and iptables firewall rules
+- Implement security best practices
+- Monitor system security
+- Handle intrusion detection
+- Set up security auditing
+- Manage security compliance
+
+## 🔧 Technical Skills Covered
+
+- Firewall configuration
+- Security monitoring
+- Intrusion detection
+- Compliance management
+- Security auditing
+- Threat mitigation
 
 This practical focuses on monitoring and managing system resources, particularly CPU usage, which is crucial for maintaining performance in cloud environments.
 
